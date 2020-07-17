@@ -1,0 +1,25 @@
+{
+  "name": "fp-ts-cheatsheets",
+  "version": "1.0.0",
+  "description": "## Option",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ryanleecode/fp-ts-cheatsheets.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ryanleecode/fp-ts-cheatsheets/issues"
+  },
+  "homepage": "https://github.com/ryanleecode/fp-ts-cheatsheets#readme",
+  "devDependencies": {
+    "@types/node": "^14.0.23",
+    "fp-ts": "^2.7.0",
+    "literate-ts": "^1.1.1",
+    "typescript": "^3.9.7"
+  }
+}
