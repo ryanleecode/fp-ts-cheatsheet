@@ -18,7 +18,7 @@
   "homepage": "https://github.com/ryanleecode/fp-ts-cheatsheets#readme",
   "devDependencies": {
     "@types/node": "^14.0.23",
-    "fp-ts": "^2.7.0",
+    "fp-ts": "^2.8.6",
     "literate-ts": "^1.1.1",
     "typescript": "^3.9.7"
   }
