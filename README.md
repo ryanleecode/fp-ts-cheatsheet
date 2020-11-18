@@ -12,24 +12,27 @@ declare function commit(): Promise<void>
 declare function rollback(): Promise<void>
 
 pipe(
-  TE.tryCatch(
-    () => begin(),
-    (err) => new Error(`begin txn failed: ${err}`),
-  ),
-  TE.chain(() =>
+  TE.bracket(
     TE.tryCatch(
-      () => commit(),
-      (err) => new Error(`commit txn failed: ${err}`),
+      () => begin(),
+      (err) => new Error(`begin txn failed: ${err}`),
     ),
-  ),
-  TE.orElse((originalError) =>
-    pipe(
+    () =>
       TE.tryCatch(
-        () => rollback(),
-        (err) => new Error(`rollback txn failed: ${err}`),
+        () => commit(),
+        (err) => new Error(`commit txn failed: ${err}`),
       ),
-      TE.fold(TE.left, () => TE.left(originalError)),
-    ),
+    (_, either) =>
+      pipe(
+        either,
+        TE.fromEither,
+        TE.orElse(() =>
+          TE.tryCatch(
+            () => rollback(),
+            (err) => new Error(`rollback txn failed: ${err}`),
+          ),
+        ),
+      ),
   ),
 )
 ```
