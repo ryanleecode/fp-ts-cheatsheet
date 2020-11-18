@@ -78,3 +78,42 @@ A.array.traverse(E.either)(arr, (val) => {
   return E.right(val)
 })
 ```
+
+## Handle a TaskEither Error with another TaskEither
+
+<!-- verifier:include-node-module:fp-ts -->
+```ts
+import { pipe } from 'fp-ts/lib/function'
+import { IOEither } from 'fp-ts/lib/IOEither'
+import {
+  swap,
+  TaskEither,
+  chainFirstW,
+  fromIOEither,
+  chain,
+} from 'fp-ts/lib/TaskEither'
+
+declare const log: (message: string, err?: Error) => IOEither<Error, void>
+
+declare const foo: TaskEither<Error, string>
+
+const handleError = <E, U>(fe: (e: E) => TaskEither<E, U>) => <A>(
+  te: TaskEither<E, A>,
+) => {
+  return pipe(
+    // 1. Put the error on the right side of the railway
+    swap(te),
+    // 2. Perform an action on the error, if there is one
+    chainFirstW(fe),
+    // 3. Put the error back on the left side
+    swap,
+    // 4. Place the original TaskEither back on the railway
+    chain(() => te),
+  )
+}
+
+pipe(
+  foo,
+  handleError((err) => pipe(log('Execution failed', err), fromIOEither)),
+) // TaskEither<Error, string>
+```
